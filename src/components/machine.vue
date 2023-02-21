@@ -46,7 +46,7 @@
 
 <script setup>
 import { ref } from "vue";
-import axios from 'axios'
+import axios from "axios";
 
 
 const props = defineProps(["name", "number", "image"]);
@@ -57,42 +57,23 @@ const startTime = ref(false);
 
 const numberMachine = props.number;
 
-
 function onCount() {
   let count = 64;
   const numberM = numberMachine;
-  var countTime = setInterval(() => {
+  var countTime = setInterval(async() => {
     count--;
-    console.log("นับเวลาถอยหลัง", count);
+    console.log("Countdown", count);
     if (count == 60) {
-             axios({
-            method: 'POST',
-            url: 'https://notify-api.line.me/api/notify',
-            header: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': "Bearer cvj9A4lVR3S0MBqpIFr1n7wsfnAR7DBlLZOh09uOvJG", 
-            },
-            Body: {
-                message: "เครื่องที่ :" + numberM + "เหลือเวลาอีก 1 นาที", 
-            },
-            }, (err, httpResponse, body) => {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log(body)
-            }
-        })
-      
-      console.log("เครื่องที่" + numberM + "เหลือเวลาอีก 1 นาที");
-      
+       axios.post('http://localhost:3000/post',{
+        'message':"Machine that :"+"" + numberM +"" +"1 minute left"
+       }).then(res=>console.log('Send Message')).catch(err=>console.log(err))
+      console.log("Machine that :" +"" +numberM +""+ "1 minute left");
     } else if (count == 0) {
       clearInterval(countTime);
-      console.log("Done");
+      console.log("Finish");
     }
   }, 1000);
 }
-
-
 
 
 </script>
